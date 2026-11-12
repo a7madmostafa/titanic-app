@@ -19,7 +19,7 @@ with mid:
     
 show_data = st.checkbox("Show sample data")
 if show_data:
-    st.dataframe(.head(10), hide_index=True)
+    st.dataframe(df.head(10), hide_index=True)
 
 # Metrics
 col1, col2, col3, col4 = st.columns(4)
