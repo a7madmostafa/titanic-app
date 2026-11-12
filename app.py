@@ -1,29 +1,31 @@
 import streamlit as st
 from utils.data import load_data
-from utils.figures import plot_family_size, plot_outcome
+from utils.figures import plot_family_size, plot_outcome, plot_heatmap
 
-df = load_data()
+
 st.set_page_config(layout="wide")
 
-# Header
-st.title("Titanic Survival Prediction App")
-st.caption("Data from https://www.kaggle.com/c/titanic/data")
-st.image("utils/titanic.jpg")
-show_data = st.checkbox("Show sample data")
-if show_data:
-    st.dataframe(df.head(10), hide_index=True)
+# Load data
+df = load_data()
 
 # Filters
-classes = st.multiselect("Select classes", df["class"].unique(), default=df["class"].unique())
-gender = st.radio("Select gender", df['sex'].unique(), horizontal=True)
+with st.sidebar:
+    classes = st.multiselect("Select classes", df["class"].unique(), default=df["class"].unique())
+    gender = st.radio("Select gender", list(df['sex'].unique()) + ["All"], horizontal=True)
+    age = st.slider("Age", 0, 80, (0, 80))
+    
+    st.write(f"Made by [**Ahmad Mostafa**](https:/www.linkedin.com/in/ahmadmostafa/)")
+if gender == "All":
+    data = df[df["class"].isin(classes) & df["age"].between(*age)]
+else:   
+    data = df[(df["class"].isin(classes)) & (df["sex"] == gender) & df["age"].between(*age)]
 
-data = df[(df["class"].isin(classes)) & (df["sex"] == gender)]
+st.session_state.data = data
 
-# Plots
-c1, c2 = st.columns(2)
-with c1:
-    st.plotly_chart(plot_family_size(data))
 
-with c2:
-    st.plotly_chart(plot_outcome(data))
-   
+# Pages
+pages = [
+    st.Page("views/overview.py", title="Overview", icon=":material/dashboard:", default=True),
+    st.Page("views/conclusion.py", title="Conclusion", icon=":material/table:"),
+]
+st.navigation(pages, position="top").run()
