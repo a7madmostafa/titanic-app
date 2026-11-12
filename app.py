@@ -6,6 +6,7 @@ st.set_page_config(layout="wide")
 
 # Load data
 df = load_data()
+st.session_state.df = df
 
 # Filters
 with st.sidebar:

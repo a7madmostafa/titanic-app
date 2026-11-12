@@ -2,6 +2,8 @@ import streamlit as st
 from utils.figures import plot_family_size, plot_outcome, plot_heatmap
 
 data = st.session_state.data
+df = st.session_state.df
+
 st.set_page_config(layout="wide")
 
 # Header
@@ -17,7 +19,7 @@ with mid:
     
 show_data = st.checkbox("Show sample data")
 if show_data:
-    st.dataframe(df.head(10), hide_index=True)
+    st.dataframe(.head(10), hide_index=True)
 
 # Metrics
 col1, col2, col3, col4 = st.columns(4)
