@@ -1,6 +1,5 @@
 import streamlit as st
 from utils.data import load_data
-from utils.figures import plot_family_size, plot_outcome, plot_heatmap
 
 
 st.set_page_config(layout="wide")
